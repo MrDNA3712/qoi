@@ -9,11 +9,16 @@ int main(int argc, char const *argv[])
 {
     printf("int size: %u, char size: %u\n",(unsigned int)sizeof(unsigned int), (unsigned int) sizeof(unsigned char));
 
+    if (argc < 2) {
+        printf("not enough arguments");
+        exit(1);
+    }
+
 	void *pixels = NULL;
 	int w, h, channels;
     if(!stbi_info(argv[1], &w, &h, &channels)) {
         printf("Couldn't read header %s\n", argv[1]);
-        exit(1);
+        exit(2);
     }
 
     // Force all odd encodings to be RGBA
