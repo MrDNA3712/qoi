@@ -7,8 +7,8 @@
 
 int main(int argc, char const *argv[])
 {
-    printf("int size: %u, char size: %u\n",(unsigned int)sizeof(unsigned int), (unsigned int) sizeof(unsigned char));
-
+    printf("int size: %u, char size: %u, long size: %u\n",(unsigned int)sizeof(unsigned int), (unsigned int)sizeof(unsigned char), (unsigned int)sizeof(unsigned long long));
+    printf("struct size: %u, width offset: %u, height offset: %u, channels offset: %u, cp offset: %u\n", (unsigned int)sizeof(qoi_desc), offsetof(qoi_desc, width), offsetof(qoi_desc, height), offsetof(qoi_desc, channels), offsetof(qoi_desc, colorspace));
     if (argc < 2) {
         printf("not enough arguments");
         exit(1);
@@ -29,18 +29,22 @@ int main(int argc, char const *argv[])
     pixels = (void *)stbi_load(argv[1], &w, &h, NULL, channels);
 
     qoi_desc desc;
-    desc.channels=channels;
     desc.height=h;
     desc.width=w;
+    desc.channels=channels;
     desc.colorspace=0;
 
-    printf("read image %i x %i px\n",w,h);
+    printf("read image %i x %i px %i channels\n",w,h,channels);
 
-    int out_size;
+    int out_size=0;
+    
+    printf("pixel address %llx\nout_size address %llx\ndesc address %llx\n", pixels, &out_size, &desc);
+
 
     void * out = encode(pixels,&out_size,&desc);
 
     printf("output size: %i\n",out_size);
+    printf("out address: %llx\n",out);
 
     return 0;
 }
